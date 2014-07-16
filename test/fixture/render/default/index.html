@@ -1,0 +1,12 @@
+Each test
+{{#each languages}} {{> hello this}} {{/each}}
+
+Range test
+{{#range 10}} 
+key: {{key}}, value: {{value}}  {{/range}}
+
+ifeval test
+{{#ifeval "languages.spanish.hello == 'Hola'"}}Pass{{/ifeval}}
+
+def test
+{{def languages.german.hello def="German Not Found"}}
