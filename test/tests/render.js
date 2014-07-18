@@ -54,7 +54,7 @@ suite('Render', function() {
 
     assert.ok(templates.index, 'View "index" should exist');
     assert.ok(templates.hello, 'View "hello" should exist');
-    assert.ok(/Variation #2/.test(templates.hello), 'View "hello" should be variation 2');
+    assert.ok(/Variation #2/.test(app.view_engine.render('hello')), 'View "hello" should be variation 2');
     done();
   });
 
@@ -67,5 +67,4 @@ suite('Render', function() {
     assert.throws(app.view_engine.render('bad', {}), Error, 'Should throw');
     done();
   });
-
 });

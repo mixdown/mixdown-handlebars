@@ -1,5 +1,5 @@
 var App = require('mixdown-app').App;
-var YourPlugin = require('../../lib/server_provider.js');
+var YourPlugin = require('../../index.js');
 var assert = require('assert');
 var ncp = require('ncp').ncp;
 var path = require('path');
@@ -15,8 +15,10 @@ var createApp = function(dev_flag) {
   // create plugin
   var p = new YourPlugin({
     development: dev_flag,
-    base: './tmp/file_watch_test/views',
-    ext: "html"
+    views: {
+      base: './tmp/file_watch_test/views',
+      ext: "html"
+    }
   });
 
   // attach it
@@ -50,16 +52,14 @@ suite('File Watch', function() {
     app.setup(function(err) {
 
       assert.ifError(err, 'Should not return error on init');
-      var old_templates = app.server_provider.templates();
+      var old = app.server_provider.templates('one');
 
       fs.writeFile(path.join(dest, 'one.html'), 'Four', function(err) {
         assert.ifError(err, 'Should not error on template write');
 
         // give time for file watcher to execute a re-crawl.
         setTimeout(function() {
-          var new_templates = app.server_provider.templates();
-
-          assert.equal(new_templates.one, old_templates.one, 'Template should not have changed.');
+          assert.equal(app.server_provider.templates('one').template, old.template, 'Template should not have changed.');
 
           done();
         }, 800);
@@ -75,19 +75,16 @@ suite('File Watch', function() {
     app.setup(function(err) {
 
       assert.ifError(err, 'Should not return error on init');
-      var old_templates = app.server_provider.templates();
 
       fs.writeFile(path.join(dest, 'one.html'), 'Four', function(err) {
         assert.ifError(err, 'Should not error on template write');
 
         // give time for file watcher to execute a re-crawl.
         setTimeout(function() {
-          var new_templates = app.server_provider.templates();
-
-          assert.equal(new_templates.one, 'Four', 'Template should have been updated.');
+          assert.equal(app.server_provider.templates('one').template(), 'Four', 'Template should have been updated.');
 
           done();
-        }, 800);
+        }, 500);
       });
 
     });

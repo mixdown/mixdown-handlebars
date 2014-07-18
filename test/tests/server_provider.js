@@ -24,9 +24,9 @@ suite('Server View Provider', function() {
 
     var templates = app.server_provider.templates();
     // console.log(JSON.stringify(templates));
-    assert.equal(templates.one, 'One!', 'One template should be correct');
-    assert.equal(templates.two, 'Two!', 'Two template should be correct');
-    assert.equal(templates['three/index'], 'Three!', 'Three template should be correct');
+    assert.equal(templates.one.markup, 'One!', 'One template should be correct');
+    assert.equal(templates.two.markup, 'Two!', 'Two template should be correct');
+    assert.equal(templates['three/index'].markup, 'Three!', 'Three template should be correct');
 
     done();
   });
