@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       var _t = hb.templates();
 
       for (var k in _t) {
-        str_buf.push('  "' + k + '"' + ': ' + _t[k].compiled.toString().replace(/;\s+/g, ';\n    '));
+        str_buf.push('  "' + k + '"' + ': ' + _t[k].compiled.toString());
       }
 
       grunt.file.write(path.join(options.dest, 'templates.js'), 'module.exports = {\n' + str_buf.join(',\n  ') + '\n};');
