@@ -6,10 +6,13 @@ suite('Server View Provider', function() {
   var app = new App();
 
   setup(function(done) {
-
+    this.timeout(50000);
     // create plugin
     var p = new YourPlugin({
-      base: './test/fixture/server/views',
+      base: [
+        './test/fixture/server/views',
+        './test/fixture/server/views2',
+      ],
       ext: "html"
     });
 
@@ -26,6 +29,7 @@ suite('Server View Provider', function() {
     // console.log(JSON.stringify(templates));
     assert.equal(templates.one.markup, 'One!', 'One template should be correct');
     assert.equal(templates.two.markup, 'Two!', 'Two template should be correct');
+    assert.equal(templates.five.markup, 'Five!', 'Five template should be correct');
     assert.equal(templates['three/index'].markup, 'Three!', 'Three template should be correct');
 
     done();
