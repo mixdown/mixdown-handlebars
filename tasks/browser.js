@@ -1,31 +1,28 @@
 var MixdownHandlebars = require('../index.js');
 var fs = require('fs');
-var path = require('path');
+var _ = require('lodash');
+var through = require('through2');
 
-module.exports = function(grunt) {
+module.exports = function(options) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+  _.defaults(options, {
+    view: {
+      base: ['./views'],
+      ext: "html"
+    }
+  });
 
-  grunt.registerTask('mixdown-handlebars', 'Generates client (browser) controller code from mixdown-handlebars.', function() {
-    // Tell Grunt this task is asynchronous.
-    var done = this.async();
+  // Load the plugin and set the view options.
+  var hb = new MixdownHandlebars(options);
+  var str_buf = [];
+  var stream = through();
 
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      development: false,
-      views: {
-        base: ['./views'],
-        ext: "html"
-      },
-      dest: './public/js/templates'
-    });
+  hb._setup(function(err) {
+    var code;
 
-    // Load the plugin and set the view options.
-    var hb = new MixdownHandlebars(options);
-    var str_buf = [];
-
-    hb._setup(function(err) {
+    if (err) {
+      code = err.stack;
+    } else {
       var templates = {};
       var _t = hb.templates();
 
@@ -33,9 +30,15 @@ module.exports = function(grunt) {
         str_buf.push('  "' + k + '"' + ': ' + _t[k].compiled.toString());
       }
 
-      grunt.file.write(path.join(options.dest, 'templates.js'), 'module.exports = {\n' + str_buf.join(',\n  ') + '\n};');
-      done();
-    });
+      code = 'module.exports = {\n' + str_buf.join(',\n  ') + '\n};';
+    }
+
+    // write and end
+    stream.write(code);
+    stream.end();
 
   });
+
+
+  return stream;
 };
