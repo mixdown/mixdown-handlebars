@@ -8,7 +8,7 @@ module.exports = HB.extend({
     this._super(options);
 
     // pass dev flag down.
-    var view_options = _.defaults(_.pick(this._options, 'development'), options.views);
+    var view_options = _.defaults(_.pick(this._options, 'development', 'app'), options.views);
     view_options.handlebars = this.handlebars;
     this.view_provider = new ServerProvider(view_options);
   },
