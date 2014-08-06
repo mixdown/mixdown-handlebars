@@ -6,7 +6,7 @@ var through = require('through2');
 module.exports = function(options) {
 
   _.defaults(options, {
-    view: {
+    views: {
       base: ['./views'],
       ext: "html"
     }
