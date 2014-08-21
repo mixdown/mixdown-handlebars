@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "class.extend": "^0.9.1",
+    "graceful-fs": "^3.0.2",
     "handlebars": "^1.3.0",
     "lodash": "^2.4.1",
     "mixdown-app": "^3.0.5",
